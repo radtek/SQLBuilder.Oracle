@@ -73,6 +73,7 @@ namespace SQLBuilder.Oracle.Builder {
                 Debug.WriteLine(null);
                 intCounter++;
             }
+            Debug.WriteLine(null);
         }
 
         /// <summary>
@@ -92,6 +93,20 @@ namespace SQLBuilder.Oracle.Builder {
                     }
                 }
             }
+        }
+        #endregion
+
+        #region Public Virtual Method
+        /// <summary>
+        /// Prints the query to the output window.
+        /// </summary>
+        public virtual void PrintQuery() {
+            Debug.WriteLine(null);
+            Debug.WriteLine("==================================================");
+            Debug.WriteLine("MySQL Query:");
+            Debug.WriteLine(this);
+            Debug.WriteLine(null);
+            this.PrintParameters();
         }
         #endregion
 
