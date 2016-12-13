@@ -9,22 +9,22 @@ namespace SQLBuilder.Oracle {
         /// <summary>
         /// OracleSql Select builder.
         /// </summary>
-        /// <param name="Database">The database.</param>
+        /// <param name="Schema">The schema.</param>
         /// <param name="Table">The table.</param>
         /// <param name="TableAlias">The alias of the table.</param>
         /// <returns>The instance of SelectQuery.</returns>
-        public static SelectQuery Select(string Database, string Table, string TableAlias) {
-            return new SelectQuery(Database, Table, TableAlias);
+        public static SelectQuery Select(string Schema, string Table, string TableAlias) {
+            return new SelectQuery(Schema, Table, TableAlias);
         }
 
         /// <summary>
         /// OracleSql Select builder.
         /// </summary>
-        /// <param name="Database">The database.</param>
+        /// <param name="Schema">The schema.</param>
         /// <param name="Table">The table.</param>
         /// <returns>The instance of SelectQuery.</returns>
-        public static SelectQuery Select(string Database, string Table) {
-            return new SelectQuery(Database, Table);
+        public static SelectQuery Select(string Schema, string Table) {
+            return new SelectQuery(Schema, Table);
         }
 
         /// <summary>
@@ -50,22 +50,22 @@ namespace SQLBuilder.Oracle {
         /// <summary>
         /// OracleSql Select Count builder.
         /// </summary>
-        /// <param name="Database">The database.</param>
+        /// <param name="Schema">The schema.</param>
         /// <param name="Table">The table.</param>
         /// <param name="TableAlias">The alias of the table.</param>
         /// <returns>The instance of SelectCountQuery.</returns>
-        public static SelectCountQuery SelectCount(string Database, string Table, string TableAlias) {
-            return new SelectCountQuery(Database, Table, TableAlias);
+        public static SelectCountQuery SelectCount(string Schema, string Table, string TableAlias) {
+            return new SelectCountQuery(Schema, Table, TableAlias);
         }
 
         /// <summary>
         /// OracleSql Select builder.
         /// </summary>
-        /// <param name="Database">The database.</param>
+        /// <param name="Schema">The schema.</param>
         /// <param name="Table">The table.</param>
         /// <returns>The instance of SelectCountQuery.</returns>
-        public static SelectCountQuery SelectCount(string Database, string Table) {
-            return new SelectCountQuery(Database, Table);
+        public static SelectCountQuery SelectCount(string Schema, string Table) {
+            return new SelectCountQuery(Schema, Table);
         }
     }
 }

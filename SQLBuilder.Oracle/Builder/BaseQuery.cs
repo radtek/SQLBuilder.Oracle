@@ -15,9 +15,9 @@ namespace SQLBuilder.Oracle.Builder {
         protected Dictionary<string, string> _VirtualFields { get; private set; }
 
         /// <summary>
-        /// Database property.
+        /// Schema property.
         /// </summary>
-        protected string _Database { get; set; }
+        protected string _Schema { get; set; }
 
         /// <summary>
         /// Table property.

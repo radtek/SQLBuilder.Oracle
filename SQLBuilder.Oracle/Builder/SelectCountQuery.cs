@@ -21,16 +21,16 @@ namespace SQLBuilder.Oracle.Builder {
 
         #region Constructor
         /// <summary>
-        /// Initializes the database, table, and table alias for the SELECT statement.
+        /// Initializes the schema, table, and table alias for the SELECT statement.
         /// </summary>
-        /// <param name="Database">The database of the query.</param>
+        /// <param name="Schema">The schema of the query.</param>
         /// <param name="Table">The table of the query.</param>
         /// <param name="TableAlias">The alias of the table.</param>
-        public SelectCountQuery(string Database, string Table, string TableAlias) {
-            if (Database.IsNullOrWhiteSpace()) {
-                throw new ArgumentException("Database argument should not be empty.");
+        public SelectCountQuery(string Schema, string Table, string TableAlias) {
+            if (Schema.IsNullOrWhiteSpace()) {
+                throw new ArgumentException("Schema argument should not be empty.");
             }
-            this._Database = Database;
+            this._Schema = Schema;
             if (Table.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Table argument should not be empty.");
             }
@@ -40,17 +40,17 @@ namespace SQLBuilder.Oracle.Builder {
             } else {
                 this._TableAlias = Table;
             }
-            this._From = String.Format("{0}.{1}{2}", Database, Table, !TableAlias.IsNullOrWhiteSpace() ? String.Format(" {0}", TableAlias) : null);
+            this._From = String.Format("{0}.{1}{2}", Schema, Table, !TableAlias.IsNullOrWhiteSpace() ? String.Format(" {0}", TableAlias) : null);
             this._InitProperties();
         }
 
         /// <summary>
-        /// Initializes the database, and table for the SELECT statement.
+        /// Initializes the schema, and table for the SELECT statement.
         /// </summary>
-        /// <param name="Database">The database of the query.</param>
+        /// <param name="Schema">The schema of the query.</param>
         /// <param name="Table">The table of the query.</param>
-        public SelectCountQuery(string Database, string Table)
-            : this(Database, Table, null) {
+        public SelectCountQuery(string Schema, string Table)
+            : this(Schema, Table, null) {
         }
 
         /// <summary>
@@ -134,14 +134,14 @@ namespace SQLBuilder.Oracle.Builder {
         /// <summary>
         /// Adds a LEFT JOIN clause.
         /// </summary>
-        /// <param name="Database">The database of the table to be joined.</param>
+        /// <param name="Schema">The schema of the table to be joined.</param>
         /// <param name="Table">The table to be joined.</param>
         /// <param name="TableAlias">The alias of the table.</param>
         /// <param name="ConditionStatement">The condition statment/s of the joined table.</param>
         /// <returns>The current instance of this class.</returns>
-        public SelectCountQuery SetLeftJoin(string Database, string Table, string TableAlias, string ConditionStatement) {
-            if (Database.IsNullOrWhiteSpace()) {
-                throw new ArgumentException("Database argument should not be empty.");
+        public SelectCountQuery SetLeftJoin(string Schema, string Table, string TableAlias, string ConditionStatement) {
+            if (Schema.IsNullOrWhiteSpace()) {
+                throw new ArgumentException("Schema argument should not be empty.");
             }
             if (Table.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Table argument should not be empty.");
@@ -152,23 +152,23 @@ namespace SQLBuilder.Oracle.Builder {
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
             }
-            this._Joins.Add(String.Format("LEFT JOIN {0}.{1}{2} ON ({3})", Database, Table, !Table.Equals(TableAlias) ? String.Format(" {0}", TableAlias) : null, ConditionStatement));
+            this._Joins.Add(String.Format("LEFT JOIN {0}.{1}{2} ON ({3})", Schema, Table, !Table.Equals(TableAlias) ? String.Format(" {0}", TableAlias) : null, ConditionStatement));
             return this;
         }
 
         /// <summary>
         /// Adds a LEFT JOIN clause.
         /// </summary>
-        /// <param name="Database">The database of the table to be joined.</param>
+        /// <param name="Schema">The schema of the table to be joined.</param>
         /// <param name="Table">The table to be joined.</param>
         /// <param name="IncrementTableAlias">The alias of the table using the incremented table name.</param>
         /// <param name="ConditionStatement">The condition statment/s of the joined table.</param>
         /// <returns>The current instance of this class.</returns>
-        public SelectCountQuery SetLeftJoin(string Database, string Table, uint IncrementTableAlias, string ConditionStatement) {
+        public SelectCountQuery SetLeftJoin(string Schema, string Table, uint IncrementTableAlias, string ConditionStatement) {
             if (IncrementTableAlias == 0) {
-                return this.SetLeftJoin(Database, Table, Table, ConditionStatement);
+                return this.SetLeftJoin(Schema, Table, Table, ConditionStatement);
             }
-            return this.SetLeftJoin(Database, Table, Table + "_" + IncrementTableAlias, ConditionStatement);
+            return this.SetLeftJoin(Schema, Table, Table + "_" + IncrementTableAlias, ConditionStatement);
         }
 
         /// <summary>
@@ -188,7 +188,7 @@ namespace SQLBuilder.Oracle.Builder {
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
             }
-            this._Joins.Add(String.Format("LEFT JOIN {0}.{1}{2} ON ({3})", this._Database, Table, !Table.Equals(TableAlias) ? String.Format(" {0}", TableAlias) : null, ConditionStatement));
+            this._Joins.Add(String.Format("LEFT JOIN {0}.{1}{2} ON ({3})", this._Schema, Table, !Table.Equals(TableAlias) ? String.Format(" {0}", TableAlias) : null, ConditionStatement));
             return this;
         }
 
@@ -219,7 +219,7 @@ namespace SQLBuilder.Oracle.Builder {
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
             }
-            this._Joins.Add(String.Format("LEFT JOIN {0}.{1} {2} ON ({3})", this._Database, this._Table, !this._Table.Equals(TableAlias) ? String.Format(" {0}", TableAlias) : null, ConditionStatement));
+            this._Joins.Add(String.Format("LEFT JOIN {0}.{1} {2} ON ({3})", this._Schema, this._Table, !this._Table.Equals(TableAlias) ? String.Format(" {0}", TableAlias) : null, ConditionStatement));
             return this;
         }
 
@@ -295,14 +295,14 @@ namespace SQLBuilder.Oracle.Builder {
         /// <summary>
         /// Adds a RIGHT JOIN clause.
         /// </summary>
-        /// <param name="Database">The database of the table to be joined.</param>
+        /// <param name="Schema">The schema of the table to be joined.</param>
         /// <param name="Table">The table to be joined.</param>
         /// <param name="TableAlias">The alias of the table.</param>
         /// <param name="ConditionStatement">The condition statment/s of the joined table.</param>
         /// <returns>The current instance of this class.</returns>
-        public SelectCountQuery SetRightJoin(string Database, string Table, string TableAlias, string ConditionStatement) {
-            if (Database.IsNullOrWhiteSpace()) {
-                throw new ArgumentException("Database argument should not be empty.");
+        public SelectCountQuery SetRightJoin(string Schema, string Table, string TableAlias, string ConditionStatement) {
+            if (Schema.IsNullOrWhiteSpace()) {
+                throw new ArgumentException("Schema argument should not be empty.");
             }
             if (Table.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Table argument should not be empty.");
@@ -313,23 +313,23 @@ namespace SQLBuilder.Oracle.Builder {
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
             }
-            this._Joins.Add(String.Format("RIGHT JOIN {0}.{1}{2} ON ({3})", Database, Table, !Table.Equals(TableAlias) ? String.Format(" {0}", TableAlias) : null, ConditionStatement));
+            this._Joins.Add(String.Format("RIGHT JOIN {0}.{1}{2} ON ({3})", Schema, Table, !Table.Equals(TableAlias) ? String.Format(" {0}", TableAlias) : null, ConditionStatement));
             return this;
         }
 
         /// <summary>
         /// Adds a RIGHT JOIN clause.
         /// </summary>
-        /// <param name="Database">The database of the table to be joined.</param>
+        /// <param name="Schema">The schema of the table to be joined.</param>
         /// <param name="Table">The table to be joined.</param>
         /// <param name="IncrementTableAlias">The alias of the table using the incremented table name.</param>
         /// <param name="ConditionStatement">The condition statment/s of the joined table.</param>
         /// <returns>The current instance of this class.</returns>
-        public SelectCountQuery SetRightJoin(string Database, string Table, uint IncrementTableAlias, string ConditionStatement) {
+        public SelectCountQuery SetRightJoin(string Schema, string Table, uint IncrementTableAlias, string ConditionStatement) {
             if (IncrementTableAlias == 0) {
-                return this.SetRightJoin(Database, Table, Table, ConditionStatement);
+                return this.SetRightJoin(Schema, Table, Table, ConditionStatement);
             }
-            return this.SetRightJoin(Database, Table, Table + "_" + IncrementTableAlias, ConditionStatement);
+            return this.SetRightJoin(Schema, Table, Table + "_" + IncrementTableAlias, ConditionStatement);
         }
 
         /// <summary>
@@ -349,7 +349,7 @@ namespace SQLBuilder.Oracle.Builder {
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
             }
-            this._Joins.Add(String.Format("RIGHT JOIN {0}.{1}{2} ON ({3})", this._Database, Table, !Table.Equals(TableAlias) ? String.Format(" {0}", TableAlias) : null, ConditionStatement));
+            this._Joins.Add(String.Format("RIGHT JOIN {0}.{1}{2} ON ({3})", this._Schema, Table, !Table.Equals(TableAlias) ? String.Format(" {0}", TableAlias) : null, ConditionStatement));
             return this;
         }
 
@@ -380,7 +380,7 @@ namespace SQLBuilder.Oracle.Builder {
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
             }
-            this._Joins.Add(String.Format("RIGHT JOIN {0}.{1} {2} ON ({3})", this._Database, this._Table, !this._Table.Equals(TableAlias) ? String.Format(" {0}", TableAlias) : null, ConditionStatement));
+            this._Joins.Add(String.Format("RIGHT JOIN {0}.{1} {2} ON ({3})", this._Schema, this._Table, !this._Table.Equals(TableAlias) ? String.Format(" {0}", TableAlias) : null, ConditionStatement));
             return this;
         }
 
