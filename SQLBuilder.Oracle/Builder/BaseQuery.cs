@@ -63,7 +63,7 @@ namespace SQLBuilder.Oracle.Builder {
                 Debug.WriteLine("No parameters available.");
                 return;
             }
-            Debug.WriteLine("OracleSQL Parameters:");
+            Debug.WriteLine("Oracle Parameters:");
             int intCounter = 1;
             foreach (KeyValuePair<string, object> kvp in this._Parameters) {
                 Debug.WriteLine(String.Format("Parameter {0}:", intCounter));
@@ -103,7 +103,7 @@ namespace SQLBuilder.Oracle.Builder {
         public virtual void PrintQuery() {
             Debug.WriteLine(null);
             Debug.WriteLine("==================================================");
-            Debug.WriteLine("MySQL Query:");
+            Debug.WriteLine("Oracle Query:");
             Debug.WriteLine(this);
             Debug.WriteLine(null);
             this.PrintParameters();
