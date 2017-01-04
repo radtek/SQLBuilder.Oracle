@@ -150,7 +150,7 @@ namespace SQLBuilder.Oracle.Builder {
                     }
                     Expression = this._VirtualFields[Expression];
                 }
-                this._Fields.Add(String.Format("{0}{1}", Expression, Alias.IsNullOrWhiteSpace() ? null : String.Format(" AS {0}", Alias)));
+                this._Fields.Add(String.Format("{0}{1}", Expression, Alias.IsNullOrWhiteSpace() ? null : String.Format(" AS \"{0}\"", Alias)));
             }
             return this;
         }
@@ -203,7 +203,7 @@ namespace SQLBuilder.Oracle.Builder {
                 if (Alias.IsNullOrWhiteSpace()) {
                     throw new ArgumentException("Alias argument should not be empty.");
                 }
-                this._Fields.Add(String.Format("({0}) AS {1}", strQuery, Alias));
+                this._Fields.Add(String.Format("({0}) AS \"{1}\"", strQuery, Alias));
             }
             return this;
         }
