@@ -120,7 +120,7 @@ namespace SQLBuilder.Oracle.Builder {
             if (Name.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Name argument should not be empty.");
             }
-            if (Regex.IsMatch(Name, @"\W")) {
+            if (!this._IsValidField(Name)) {
                 throw new ArgumentException("Name argument should only contain any word character (letter, number, underscore).");
             }
             if (Expression.IsNullOrWhiteSpace()) {
@@ -163,6 +163,49 @@ namespace SQLBuilder.Oracle.Builder {
             } else {
                 return Value is sbyte || Value is byte || Value is short || Value is ushort || Value is int || Value is uint || Value is long || Value is ulong || Value is float || Value is double || Value is decimal;
             }
+        }
+
+        /// <summary>
+        /// Checks if an expression is valid.
+        /// </summary>
+        /// <param name="Expression">The expression to be checked.</param>
+        /// <returns>True if valid. Otherwise, false.</returns>
+        protected bool _IsValidExpression(string Expression) {
+            return Regex.IsMatch(Expression, @"^(?:[\w]+\.)?[\w]+$");
+        }
+
+        /// <summary>
+        /// Checks if a field is valid.
+        /// </summary>
+        /// <param name="Field">The field to be checked.</param>
+        /// <returns>True if valid. Otherwise, false.</returns>
+        protected bool _IsValidField(string Field) {
+            return Regex.IsMatch(Field, @"\w");
+        }
+
+        /// <summary>
+        /// Encloses the value with backticks.
+        /// </summary>
+        /// <param name="Value">The value to be formatted.</param>
+        /// <returns>The backticked value.</returns>
+        protected string _EncloseBackTick(string Value) {
+            var strValue = this._RemoveBackTick(Value);
+            if (strValue.IsNullOrWhiteSpace() || this._IsValidField(strValue)) {
+                return Value;
+            }
+            return String.Format("\"{0}\"", strValue);
+        }
+
+        /// <summary>
+        /// Removes backticks from a value.
+        /// </summary>
+        /// <param name="Value">The value to be formatted.</param>
+        /// <returns>The backtick-free value.</returns>
+        protected string _RemoveBackTick(string Value) {
+            if (Value.IsNullOrWhiteSpace()) {
+                return Value;
+            }
+            return Value.Replace("\"", "").Trim();
         }
         #endregion
 
