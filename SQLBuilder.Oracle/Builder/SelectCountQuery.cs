@@ -36,6 +36,9 @@ namespace SQLBuilder.Oracle.Builder {
             }
             this._Table = Table;
             if (!TableAlias.IsNullOrWhiteSpace()) {
+                if (!this._IsValidField(TableAlias)) {
+                    throw new ArgumentException("TableAlias argument should only contain letters, numbers and/or underscores.");
+                }
                 this._TableAlias = TableAlias;
             } else {
                 this._TableAlias = Table;
@@ -69,6 +72,9 @@ namespace SQLBuilder.Oracle.Builder {
             if (TableAlias.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("TableAlias argument should not be empty.");
             }
+            if (!this._IsValidField(TableAlias)) {
+                throw new ArgumentException("TableAlias argument should only contain letters, numbers and/or underscores.");
+            }
             this._From = String.Format("({0}) {1}", strQuery, TableAlias);
             this._TableAlias = TableAlias;
             this._InitProperties();
@@ -92,6 +98,9 @@ namespace SQLBuilder.Oracle.Builder {
             }
             if (TableAlias.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("TableAlias argument should not be empty.");
+            }
+            if (!this._IsValidField(TableAlias)) {
+                throw new ArgumentException("TableAlias argument should only contain letters, numbers and/or underscores.");
             }
             this._From = String.Format("(({0})) {1}", String.Join(") UNION (", lstQueries.ToArray()), TableAlias);
             this._TableAlias = TableAlias;
@@ -149,6 +158,9 @@ namespace SQLBuilder.Oracle.Builder {
             if (TableAlias.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("TableAlias argument should not be empty.");
             }
+            if (!this._IsValidField(TableAlias)) {
+                throw new ArgumentException("TableAlias argument should only contain letters, numbers and/or underscores.");
+            }
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
             }
@@ -185,6 +197,9 @@ namespace SQLBuilder.Oracle.Builder {
             if (TableAlias.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("TableAlias argument should not be empty.");
             }
+            if (!this._IsValidField(TableAlias)) {
+                throw new ArgumentException("TableAlias argument should only contain letters, numbers and/or underscores.");
+            }
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
             }
@@ -215,6 +230,9 @@ namespace SQLBuilder.Oracle.Builder {
         public SelectCountQuery SetLeftJoin(string TableAlias, string ConditionStatement) {
             if (TableAlias.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("TableAlias argument should not be empty.");
+            }
+            if (!this._IsValidField(TableAlias)) {
+                throw new ArgumentException("TableAlias argument should only contain letters, numbers and/or underscores.");
             }
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
@@ -254,6 +272,9 @@ namespace SQLBuilder.Oracle.Builder {
             if (TableAlias.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("TableAlias argument should not be empty.");
             }
+            if (!this._IsValidField(TableAlias)) {
+                throw new ArgumentException("TableAlias argument should only contain letters, numbers and/or underscores.");
+            }
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
             }
@@ -285,6 +306,9 @@ namespace SQLBuilder.Oracle.Builder {
             if (TableAlias.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("TableAlias argument should not be empty.");
             }
+            if (!this._IsValidField(TableAlias)) {
+                throw new ArgumentException("TableAlias argument should only contain letters, numbers and/or underscores.");
+            }
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
             }
@@ -309,6 +333,9 @@ namespace SQLBuilder.Oracle.Builder {
             }
             if (TableAlias.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("TableAlias argument should not be empty.");
+            }
+            if (!this._IsValidField(TableAlias)) {
+                throw new ArgumentException("TableAlias argument should only contain letters, numbers and/or underscores.");
             }
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
@@ -346,6 +373,9 @@ namespace SQLBuilder.Oracle.Builder {
             if (TableAlias.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("TableAlias argument should not be empty.");
             }
+            if (!this._IsValidField(TableAlias)) {
+                throw new ArgumentException("TableAlias argument should only contain letters, numbers and/or underscores.");
+            }
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
             }
@@ -376,6 +406,9 @@ namespace SQLBuilder.Oracle.Builder {
         public SelectCountQuery SetRightJoin(string TableAlias, string ConditionStatement) {
             if (TableAlias.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("TableAlias argument should not be empty.");
+            }
+            if (!this._IsValidField(TableAlias)) {
+                throw new ArgumentException("TableAlias argument should only contain letters, numbers and/or underscores.");
             }
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
@@ -415,6 +448,9 @@ namespace SQLBuilder.Oracle.Builder {
             if (TableAlias.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("TableAlias argument should not be empty.");
             }
+            if (!this._IsValidField(TableAlias)) {
+                throw new ArgumentException("TableAlias argument should only contain letters, numbers and/or underscores.");
+            }
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
             }
@@ -445,6 +481,9 @@ namespace SQLBuilder.Oracle.Builder {
             }
             if (TableAlias.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("TableAlias argument should not be empty.");
+            }
+            if (!this._IsValidField(TableAlias)) {
+                throw new ArgumentException("TableAlias argument should only contain letters, numbers and/or underscores.");
             }
             if (ConditionStatement.IsNullOrWhiteSpace()) {
                 throw new ArgumentException("Condition argument should not be empty.");
@@ -499,7 +538,11 @@ namespace SQLBuilder.Oracle.Builder {
                     if (strExpression.IsNullOrWhiteSpace()) {
                         continue;
                     }
-                    this._Groups.Add(strExpression);
+                    if (this._VirtualFields.ContainsKey(strExpression)) {
+                        this._Groups.Add(this._VirtualFields[strExpression]);
+                    } else {
+                        this._Groups.Add(strExpression);
+                    }
                 }
             }
             return this;
@@ -563,11 +606,7 @@ namespace SQLBuilder.Oracle.Builder {
                     if (strExpression.IsNullOrWhiteSpace()) {
                         continue;
                     }
-                    if (this._VirtualFields.ContainsKey(strExpression)) {
-                        lstExpression.Add(this._VirtualFields[strExpression]);
-                    } else {
-                        lstExpression.Add(strExpression);
-                    }
+                    lstExpression.Add(this._EncloseBackTick(strExpression));
                 }
                 if (lstExpression.Count > 0) {
                     this._Orders.Add(String.Format("{0} {1}", String.Join(", ", lstExpression.ToArray()), this._GetOrderDirection(Direction)));
@@ -600,10 +639,10 @@ namespace SQLBuilder.Oracle.Builder {
                 sb.Append(String.Format("\n{0}", String.Join("\n", this._Joins.ToArray())));
             }
             if (this._Wheres.Count > 0) {
-                sb.Append(String.Format("\nWHERE ({0})", String.Join(" AND ", this._Wheres.ToArray())));
+                sb.Append(String.Format("\nWHERE ({0})", String.Join("\nAND ", this._Wheres.ToArray())));
             }
             if (this._Groups.Count > 0) {
-                string strGroupBy = String.Format("\nGROUP BY {0}", String.Join(", ", this._Groups.ToArray()));
+                string strGroupBy = String.Format("\nGROUP BY {0}", String.Join("\n,", this._Groups.ToArray()));
                 if (this._IsWithRollUp) {
                     sb.Append(strGroupBy);
                 } else {
@@ -614,10 +653,10 @@ namespace SQLBuilder.Oracle.Builder {
                 sb.Append(" WITH ROLLUP");
             }
             if (this._Havings.Count > 0) {
-                sb.Append(String.Format("\nHAVING ({0})", String.Join(" AND ", this._Havings.ToArray())));
+                sb.Append(String.Format("\nHAVING ({0})", String.Join("\nAND ", this._Havings.ToArray())));
             }
             if (this._Orders.Count > 0) {
-                sb.Append(String.Format("\nORDER BY {0}", String.Join(", ", this._Orders.ToArray())));
+                sb.Append(String.Format("\nORDER BY {0}", String.Join("\n,", this._Orders.ToArray())));
             }
             return sb.ToString().Trim();
         }
