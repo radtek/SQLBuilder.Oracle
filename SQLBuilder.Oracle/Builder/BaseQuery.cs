@@ -171,7 +171,7 @@ namespace SQLBuilder.Oracle.Builder {
         /// <param name="Expression">The expression to be checked.</param>
         /// <returns>True if valid. Otherwise, false.</returns>
         protected bool _IsValidExpression(string Expression) {
-            return Regex.IsMatch(Expression, @"^(?:[\w]+\.)?[\w]+$");
+            return Regex.IsMatch(Expression, @"^(?:\w+\.)?\w+$");
         }
 
         /// <summary>
@@ -180,7 +180,7 @@ namespace SQLBuilder.Oracle.Builder {
         /// <param name="Field">The field to be checked.</param>
         /// <returns>True if valid. Otherwise, false.</returns>
         protected bool _IsValidField(string Field) {
-            return Regex.IsMatch(Field, @"\w");
+            return Regex.IsMatch(Field, @"^\w*$");
         }
 
         /// <summary>
